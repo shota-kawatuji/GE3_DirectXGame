@@ -28,7 +28,7 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="keyNumber">キー番号( DIK_0 等 )</param>
 	/// <returns>トリガーか</returns>
-	bool TiggerKey(BYTE keyNumber);
+	bool TriggerKey(BYTE keyNumber);
 
 private: // メンバ変数
 	// キーボードのデバイス

@@ -35,9 +35,27 @@ void Input::Update() {
 }
 
 bool Input::PushKey(BYTE keyNumber) {
+	// 異常な引数を検出
+	assert(0 <= keyNumber && keyNumber <= 256);
 
+	// 0でなければ押している
+	if (key[keyNumber]) {
+		return true;
+	}
+
+	// 押していない
+	return false;
 }
 
-bool Input::TiggerKey(BYTE keyNumber) {
+bool Input::TriggerKey(BYTE keyNumber) {
+	// 異常な引数を検出
+	assert(0 <= keyNumber && keyNumber <= 256);
 
+	// 前回が0で、今回が0でなければトリガー
+	if (!keyPre[keyNumber] && key[keyNumber]) {
+		return true;
+	}
+
+	// トリガーでない
+	return false;
 }
