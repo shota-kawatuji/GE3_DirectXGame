@@ -36,10 +36,19 @@ void WinApp::Initialize() {
 	// ウィンドウを表示状態にする
 	ShowWindow(hwnd, SW_SHOW);
 
-	MSG msg{};  // メッセージ
-
 }
 
 void WinApp::Update() {
 
+}
+
+LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+	// メッセージで分岐
+	switch (msg)
+	{
+	case WM_DESTROY: // ウィンドウが破壊された
+		PostQuitMessage(0); // OSに対して、アプリの終了を伝える
+		return 0;
+	}
+	return DefWindowProc(hwnd, msg, wparam, lparam); // 標準の処理を行う
 }
