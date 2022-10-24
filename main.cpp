@@ -218,42 +218,42 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Input* input = nullptr;
 
 #pragma region WindowsAPI初期化処理
-	// ウィンドウサイズ
-	const int window_width = 1280;  // 横幅
-	const int window_height = 720;  // 縦幅
+	//// ウィンドウサイズ
+	//const int window_width = 1280;  // 横幅
+	//const int window_height = 720;  // 縦幅
 
-	// ウィンドウクラスの設定
-	WNDCLASSEX w{};
-	w.cbSize = sizeof(WNDCLASSEX);
-	w.lpfnWndProc = (WNDPROC)WindowProc; // ウィンドウプロシージャを設定
-	w.lpszClassName = L"DirectXGame"; // ウィンドウクラス名
-	w.hInstance = GetModuleHandle(nullptr); // ウィンドウハンドル
-	w.hCursor = LoadCursor(NULL, IDC_ARROW); // カーソル指定
+	//// ウィンドウクラスの設定
+	//WNDCLASSEX w{};
+	//w.cbSize = sizeof(WNDCLASSEX);
+	//w.lpfnWndProc = (WNDPROC)WindowProc; // ウィンドウプロシージャを設定
+	//w.lpszClassName = L"DirectXGame"; // ウィンドウクラス名
+	//w.hInstance = GetModuleHandle(nullptr); // ウィンドウハンドル
+	//w.hCursor = LoadCursor(NULL, IDC_ARROW); // カーソル指定
 
-	// ウィンドウクラスをOSに登録する
-	RegisterClassEx(&w);
-	// ウィンドウサイズ{ X座標 Y座標 横幅 縦幅 }
-	RECT wrc = { 0, 0, window_width, window_height };
-	// 自動でサイズを補正する
-	AdjustWindowRect(&wrc, WS_OVERLAPPEDWINDOW, false);
+	//// ウィンドウクラスをOSに登録する
+	//RegisterClassEx(&w);
+	//// ウィンドウサイズ{ X座標 Y座標 横幅 縦幅 }
+	//RECT wrc = { 0, 0, window_width, window_height };
+	//// 自動でサイズを補正する
+	//AdjustWindowRect(&wrc, WS_OVERLAPPEDWINDOW, false);
 
-	// ウィンドウオブジェクトの生成
-	HWND hwnd = CreateWindow(w.lpszClassName, // クラス名
-		L"DirectXGame",         // タイトルバーの文字
-		WS_OVERLAPPEDWINDOW,        // 標準的なウィンドウスタイル
-		CW_USEDEFAULT,              // 表示X座標（OSに任せる）
-		CW_USEDEFAULT,              // 表示Y座標（OSに任せる）
-		wrc.right - wrc.left,       // ウィンドウ横幅
-		wrc.bottom - wrc.top,   // ウィンドウ縦幅
-		nullptr,                // 親ウィンドウハンドル
-		nullptr,                // メニューハンドル
-		w.hInstance,            // 呼び出しアプリケーションハンドル
-		nullptr);               // オプション
+	//// ウィンドウオブジェクトの生成
+	//HWND hwnd = CreateWindow(w.lpszClassName, // クラス名
+	//	L"DirectXGame",         // タイトルバーの文字
+	//	WS_OVERLAPPEDWINDOW,        // 標準的なウィンドウスタイル
+	//	CW_USEDEFAULT,              // 表示X座標（OSに任せる）
+	//	CW_USEDEFAULT,              // 表示Y座標（OSに任せる）
+	//	wrc.right - wrc.left,       // ウィンドウ横幅
+	//	wrc.bottom - wrc.top,   // ウィンドウ縦幅
+	//	nullptr,                // 親ウィンドウハンドル
+	//	nullptr,                // メニューハンドル
+	//	w.hInstance,            // 呼び出しアプリケーションハンドル
+	//	nullptr);               // オプション
 
-	// ウィンドウを表示状態にする
-	ShowWindow(hwnd, SW_SHOW);
+	//// ウィンドウを表示状態にする
+	//ShowWindow(hwnd, SW_SHOW);
 
-	MSG msg{};  // メッセージ
+	//MSG msg{};  // メッセージ
 #pragma endregion
 
 #pragma region DirectX初期化処理
@@ -961,7 +961,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		input->Update();
 
 		// 数字の0キーが押されていたら
-		if (input->TriggerKey(DIK_0))
+		if (input->PushKey(DIK_0))
 		{
 		    OutputDebugStringA("Hit 0\n");  // 出力ウィンドウに「Hit 0」と表示
 		}
@@ -969,16 +969,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// DirectX毎フレーム処理　ここから
 		static float red = 1.0f;
 
-		if (input->TriggerKey(DIK_SPACE)) {
+		if (input->PushKey(DIK_SPACE)) {
 		    red -= 0.01f;
 		    red = max(0, red);
 		    constMapMaterial->color = XMFLOAT4(red, 1.0f - red, 0, 0.5f);              // RGBAで半透明の赤
 		}
 
-		if (input->TriggerKey(DIK_D) || input->TriggerKey(DIK_A))
+		if (input->PushKey(DIK_D) || input->PushKey(DIK_A))
 		{
-			if (input->TriggerKey(DIK_D)) { angle += XMConvertToRadians(1.0f); }
-			else if (input->TriggerKey(DIK_A)) { angle -= XMConvertToRadians(1.0f); }
+			if (input->PushKey(DIK_D)) { angle += XMConvertToRadians(1.0f); }
+			else if (input->PushKey(DIK_A)) { angle -= XMConvertToRadians(1.0f); }
 
 			// angleラジアンだけY軸まわりに回転。半径は-100
 			eye.x = -100 * sinf(angle);
@@ -988,12 +988,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 		// 座標操作
-		if (input->TriggerKey(DIK_UP) || input->TriggerKey(DIK_DOWN) || input->TriggerKey(DIK_RIGHT) || input->TriggerKey(DIK_LEFT))
+		if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
 		{
-			if (input->TriggerKey(DIK_UP)) { object3ds[0].position.y += 1.0f; }
-			else if (input->TriggerKey(DIK_DOWN)) { object3ds[0].position.y -= 1.0f; }
-			if (input->TriggerKey(DIK_RIGHT)) { object3ds[0].position.x += 1.0f; }
-			else if (input->TriggerKey(DIK_LEFT)) { object3ds[0].position.x -= 1.0f; }
+			if (input->PushKey(DIK_UP)) { object3ds[0].position.y += 1.0f; }
+			else if (input->PushKey(DIK_DOWN)) { object3ds[0].position.y -= 1.0f; }
+			if (input->PushKey(DIK_RIGHT)) { object3ds[0].position.x += 1.0f; }
+			else if (input->PushKey(DIK_LEFT)) { object3ds[0].position.x -= 1.0f; }
 		}
 
 		// 全オブジェクトについて処理

@@ -24,20 +24,19 @@ void Input::Initialize(HINSTANCE hInstance, HWND hwnd) {
 }
 
 void Input::Update() {
-	keyboard->Acquire();	// キーボード動作開始
+	HRESULT result;
 
 	// 前回のキー入力を保存
 	memcpy(keyPre, key, sizeof(key));
 
+	// キーボード動作開始
+	result = keyboard->Acquire();
 	// キーの入力
-	keyboard->GetDeviceState(sizeof(key), key);
+	result = keyboard->GetDeviceState(sizeof(key), key);
 
 }
 
 bool Input::PushKey(BYTE keyNumber) {
-	// 異常な引数を検出
-	assert(0 <= keyNumber && keyNumber <= 256);
-
 	// 0でなければ押している
 	if (key[keyNumber]) {
 		return true;
@@ -48,9 +47,6 @@ bool Input::PushKey(BYTE keyNumber) {
 }
 
 bool Input::TriggerKey(BYTE keyNumber) {
-	// 異常な引数を検出
-	assert(0 <= keyNumber && keyNumber <= 256);
-
 	// 前回が0で、今回が0でなければトリガー
 	if (!keyPre[keyNumber] && key[keyNumber]) {
 		return true;
