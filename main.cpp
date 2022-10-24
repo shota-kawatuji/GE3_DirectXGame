@@ -217,7 +217,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Input* input = nullptr;
 
-
 #pragma region WindowsAPI初期化処理
 	// ウィンドウサイズ
 	const int window_width = 1280;  // 横幅

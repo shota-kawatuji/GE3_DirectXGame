@@ -1,53 +1,43 @@
 #include "Input.h"
 #include <cassert>
-#include <Windows.h>
 
 #pragma comment(lib, "dinput8.lib")
-#pragma comment(lib, "dxguid.lib")
 
-void Input::Initialize(HINSTANCE hInstance, HWND hwnd)
-{
+void Input::Initialize(HINSTANCE hInstance, HWND hwnd) {
 	HRESULT result;
 
-	// DirectInputのインスタンス生成
-	result = DirectInput8Create(
-		hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput, nullptr);
+	// DirectInputオブジェクトの生成	
+	result = DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput, nullptr);
 	assert(SUCCEEDED(result));
 
-	// キーボードデバイスの生成
+	// キーボードデバイスの生成	
 	result = directInput->CreateDevice(GUID_SysKeyboard, &keyboard, NULL);
+	assert(SUCCEEDED(result));
+
 	// 入力データ形式のセット
 	result = keyboard->SetDataFormat(&c_dfDIKeyboard); // 標準形式
 	assert(SUCCEEDED(result));
+
 	// 排他制御レベルのセット
-	result = keyboard->SetCooperativeLevel(
-		hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	result = keyboard->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(result));
 }
 
-void Input::Update()
-{
+void Input::Update() {
+	keyboard->Acquire();	// キーボード動作開始
+
 	// 前回のキー入力を保存
 	memcpy(keyPre, key, sizeof(key));
-	
-	// キーボード情報の取得開始
-	keyboard->Acquire();
-	// 全キーの入力状態を取得する
+
+	// キーの入力
 	keyboard->GetDeviceState(sizeof(key), key);
+
 }
 
-bool Input::PushKey(BYTE keyNumber)
-{
-	// 指定キーを押していなければtrueを返す
-	if (key[keyNumber])
-	{
-		return true;
-	}
-	return false;
+bool Input::PushKey(BYTE keyNumber) {
+
 }
 
-bool Input::TiggerKey(BYTE keyNumber)
-{
+bool Input::TiggerKey(BYTE keyNumber) {
 
-	return false;
 }
