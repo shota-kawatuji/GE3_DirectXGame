@@ -14,6 +14,8 @@ public: // メンバ関数
 	// getter
 	HWND GetHwnd() const { return hwnd; }
 	HINSTANCE GetInstance() const { return w.hInstance; }
+	// 終了
+	void Finalize();
 
 private:
 	// ウィンドウハンドル

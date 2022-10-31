@@ -47,3 +47,8 @@ LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 	}
 	return DefWindowProc(hwnd, msg, wparam, lparam); // 標準の処理を行う
 }
+
+void WinApp::Finalize() {
+	// ウィンドウクラスを登録解除
+	UnregisterClass(w.lpszClassName, w.hInstance);
+}

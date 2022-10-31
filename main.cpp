@@ -441,7 +441,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// 入力の初期化
 	input = new Input();
-	input->Initialize(winApp->GetInstance(), winApp->GetHwnd());
+	input->Initialize(winApp);
 
 #pragma region 描画初期化処理
 
@@ -811,7 +811,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ヒープ設定
 	D3D12_HEAP_PROPERTIES cbHeapProp{};
-	cbHeapProp.Type = D3D12_HEAP_TYPE_UPLOAD;                   // GPUへの転送用
+	cbHeapProp.Type = D3D12_HEAP_TYPE_UPLOAD; // GPUへの転送用
 	// リソース設定
 	D3D12_RESOURCE_DESC cbResourceDesc{};
 	cbResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
@@ -837,13 +837,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	assert(SUCCEEDED(result));
 	// 値を書き込むと自動的に転送される
 	constMapMaterial->color = XMFLOAT4(1, 1, 1, 1);
-
-	//// 並行投影行列の計算
-	//constMapTransform->mat = XMMatrixOrthographicOffCenterLH(
-	//    0.0f, window_width,
-	//    window_height, 0.0f,
-	//    0.0f, 1.0f);
-
 	// 射影変換行列(透視投影)
 	XMMATRIX matProjection = XMMatrixPerspectiveFovLH(
 		XMConvertToRadians(45.0f),
@@ -1079,8 +1072,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	}
 
-	// ウィンドウクラスを登録解除
-	UnregisterClass(w.lpszClassName, w.hInstance);
+	// WindowsAPIの終了処理
+	winApp->Finalize();
 
 	delete input;
 	delete winApp;
