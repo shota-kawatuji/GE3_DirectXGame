@@ -182,6 +182,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DirectXCommon.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="WinApp.h" />
   </ItemGroup>
