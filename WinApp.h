@@ -16,6 +16,8 @@ public: // メンバ関数
 	HINSTANCE GetInstance() const { return w.hInstance; }
 	// 終了
 	void Finalize();
+	// メッセージの処理
+	bool ProcessMessage();
 
 private:
 	// ウィンドウハンドル
