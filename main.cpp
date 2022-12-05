@@ -844,7 +844,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		assert(SUCCEEDED(result));
 
 		// DirectX毎フレーム処理　ここまで
-
 	}
 
 	// WindowsAPIの終了処理
@@ -852,5 +851,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	delete input;
 	delete winApp;
+	delete dxcommon;
+
 	return 0;
 }

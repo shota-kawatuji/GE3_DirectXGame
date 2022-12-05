@@ -1,16 +1,36 @@
 #include "DirectXCommon.h"
+#include <cassert>
+#include <vector>
+
+#pragma comment(lib,"d3d12.lib")
+#pragma comment(lib,"dxgi.lib")
+
+using namespace Microsoft::WRL;
 
 void DirectXCommon::Initialize()
 {
-	// DirectX初期化処理　ここから
+	// NULL検出
+	assert(winApp);
+	// メンバ変数に記録
+	this->winApp = winApp;
+
+	// デバイスの初期化
+	void InitializeDevice();
+	// コマンド関連の初期化
+	void InitializeCommand();
+	// スワップチェーンの初期化
+	void InitializeSwapchain();
+	// レンダーターゲットビューの初期化
+	void InitializeRenderTargetView();
+	// 深度バッファの初期化
+	void InitializeDepthBuffer();
+	// フェンスの初期化
+	void InitializeFence();
+}
+
+void DirectXCommon::InitializeDevice()
+{
 	HRESULT result;
-	ComPtr<ID3D12Device> device;
-	ComPtr<IDXGIFactory7> dxgiFactory;
-	ComPtr<IDXGISwapChain4> swapChain;
-	ComPtr<ID3D12CommandAllocator> commandAllocator;
-	ComPtr<ID3D12GraphicsCommandList> commandList;
-	ComPtr<ID3D12CommandQueue> commandQueue;
-	ComPtr<ID3D12DescriptorHeap> rtvHeap;
 
 #ifdef _DEBUG
 	//デバッグレイヤーをオンに
@@ -98,6 +118,11 @@ void DirectXCommon::Initialize()
 		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
 	}
 #endif
+}
+
+void DirectXCommon::InitializeCommand()
+{
+	HRESULT result;
 
 	// コマンドアロケータを生成
 	result = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator));
@@ -112,9 +137,13 @@ void DirectXCommon::Initialize()
 	//コマンドキューを生成
 	result = device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue));
 	assert(SUCCEEDED(result));
+}
+
+void DirectXCommon::InitializeSwapchain()
+{
+	HRESULT result;
 
 	// スワップチェーンの設定
-	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
 	swapChainDesc.Width = 1280;
 	swapChainDesc.Height = 720;
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;  // 色情報の書式
@@ -134,15 +163,20 @@ void DirectXCommon::Initialize()
 	swapChain1->QueryInterface(IID_PPV_ARGS(&swapChain));
 	assert(SUCCEEDED(result));
 
+}
+
+void DirectXCommon::InitializeRenderTargetView()
+{
+	HRESULT result;
+
 	// デスクリプタヒープの設定
 	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc{};
 	rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV; // レンダーターゲットビュー
-	rtvHeapDesc.NumDescriptors = swapChainDesc.BufferCount;    // 裏表の２つ
+	rtvHeapDesc.NumDescriptors = swapChainDesc.BufferCount;   // 裏表の２つ
 	// デスクリプタヒープの生成
 	device->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&rtvHeap));
 
 	// バックバッファ
-	std::vector<ComPtr<ID3D12Resource>> backBuffers;
 	backBuffers.resize(swapChainDesc.BufferCount);
 
 	// スワップチェーンの全てのバッファについて処理する
@@ -161,6 +195,11 @@ void DirectXCommon::Initialize()
 		// レンダーターゲットビューの生成
 		device->CreateRenderTargetView(backBuffers[i].Get(), &rtvDesc, rtvHandle);
 	}
+}	
+
+void DirectXCommon::InitializeDepthBuffer()
+{
+	HRESULT result;
 
 	// リソース設定
 	D3D12_RESOURCE_DESC depthResourceDesc{};
@@ -180,7 +219,6 @@ void DirectXCommon::Initialize()
 	depthClearValue.DepthStencil.Depth = 1.0f; // 深度値1.0f（最大値）でクリア
 	depthClearValue.Format = DXGI_FORMAT_D32_FLOAT; // 深度値フォーマット
 	// リソース生成
-	ComPtr<ID3D12Resource> depthBuff;
 	result = device->CreateCommittedResource(
 		&depthHeapProp,
 		D3D12_HEAP_FLAG_NONE,
@@ -193,7 +231,6 @@ void DirectXCommon::Initialize()
 	D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc{};
 	dsvHeapDesc.NumDescriptors = 1; // 深度ビューは1つ
 	dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV; // デプスステンシルビュー
-	ComPtr<ID3D12DescriptorHeap> dsvHeap;
 	result = device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&dsvHeap));
 
 	// 深度ビュー作成
@@ -204,13 +241,15 @@ void DirectXCommon::Initialize()
 		depthBuff.Get(),
 		&dsvDesc,
 		dsvHeap->GetCPUDescriptorHandleForHeapStart());
+}
+
+void DirectXCommon::InitializeFence()
+{
+	HRESULT result;
 
 	// フェンスの生成
-	ComPtr<ID3D12Fence> fence;
 	UINT64 fenceVal = 0;
 
 	result = device->CreateFence(fenceVal, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
 	assert(SUCCEEDED(result));
-
-	// DirectX初期化処理　ここまで
 }
