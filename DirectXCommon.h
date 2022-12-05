@@ -22,6 +22,10 @@ public: // メンバ変数
 	void InitializeDepthBuffer();
 	// フェンスの初期化
 	void InitializeFence();
+	// 描画前処理
+	void PreDraw();
+	// 描画後処理
+	void PostDraw();
 
 private:
 	// DirectX12デバイス
@@ -47,7 +51,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap;
 	// フェンス
 	Microsoft::WRL::ComPtr<ID3D12Fence> fence;
-
+	// フェンス値
+	UINT64 fenceVal = 0;
 private:
 	// WindowsAPI
 	WinApp* winApp = nullptr;
