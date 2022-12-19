@@ -193,9 +193,6 @@ void UploadSubresources(ID3D12Resource* texBuff, const ScratchImage& scratchImg)
     }
 }
 
-
-
-
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     //ポインタ
