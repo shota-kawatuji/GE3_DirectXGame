@@ -1,44 +1,39 @@
 #pragma once
-#include <wrl.h>
-#include <dinput.h>
 #include "WinApp.h"
-#define DIRECTINPUT_VERSION 0x0800 // DirectInputのバージョン指定
+#include <wrl.h>
 
-// 入力
+#define DIRECTINPUT_VERSION     0x0800   // DirectInputのバージョン指定
+#include <dinput.h>
 class Input
 {
 public:
-	// namespace省略
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+	//namespace省略
+	template<class  T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 
-public: // メンバ関数
-	// 初期化
+public:
+	//初期化
 	void Initialize(WinApp* winApp);
-	// 更新
+	//更新
 	void Update();
-
 	/// <summary>
-	/// キーの押下
+	/// キーの押下をチェック
 	/// </summary>
-	/// <param name="keyNumber">キー番号( DIK_0 等)</param>
-	/// <returns>押されているか</returns>
 	bool PushKey(BYTE keyNumber);
-
 	/// <summary>
-	/// キーのトリガーをチェック
+	/// キーの押下をチェック
 	/// </summary>
-	/// <param name="keyNumber">キー番号( DIK_0 等 )</param>
-	/// <returns>トリガーか</returns>
 	bool TriggerKey(BYTE keyNumber);
 
-private: // メンバ変数
-	// キーボードのデバイス
-	ComPtr<IDirectInputDevice8> keyboard;
-	ComPtr<IDirectInput8> directInput;
-	// WindowsAPI
+private:
+	//windowsAPI
 	WinApp* winApp_ = nullptr;
-	// 全キーの状態
+
+	//キーボードのデバイス
+	ComPtr<IDirectInputDevice8> keyboard;
+	//DirectInputのインスタンス
+	ComPtr<IDirectInput8> directInput = nullptr;
+
 	BYTE key[256] = {};
-	// 前回の全キーの状態
 	BYTE keyPre[256] = {};
+
 };
