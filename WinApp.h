@@ -20,8 +20,10 @@ public:
 
 	//getter
 	HWND GetHwnd()const { return hwnd; }
+
 	//getter
 	HINSTANCE GetHInstance()const { return w.hInstance; }
+
 public://定数
 	// ウィンドウサイズ
 	static const int window_width = 1280;  // 横幅

@@ -31,7 +31,6 @@ void DirectXCommon::Initialize(WinApp* winApp)
 	//フェンスの初期化
 	InitializeFence();
 	// DirectX初期化処理　ここまで
-
 }
 
 void DirectXCommon::PreDraw()
@@ -79,7 +78,6 @@ void DirectXCommon::PreDraw()
 	scissorRect.bottom = scissorRect.top + WinApp::window_height;       // 切り抜き座標下
 	// シザー矩形設定コマンドを、コマンドリストに積む
 	commandList->RSSetScissorRects(1, &scissorRect);
-
 }
 
 void DirectXCommon::PostDraw()
@@ -295,7 +293,6 @@ void DirectXCommon::InitializeRenderTargetView()
 		// レンダーターゲットビューの生成
 		device->CreateRenderTargetView(backBuffers[i].Get(), &rtvDesc, rtvHandle);
 	}
-
 }
 
 void DirectXCommon::InitializeDepthBuffer()

@@ -6,7 +6,6 @@ SamplerState smp : register(s0);      	// 0番スロットに設定されたサ�
 float4 main(VSOutput input) : SV_TARGET
 {
     float4 texcolor = float4(tex.Sample(smp, input.uv));
-
     // 右下奥　向きのライト
     float3 light = normalize(float3(1,-1,1));
     // 光源へのベクトルと法線ベクトルの内積

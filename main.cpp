@@ -6,8 +6,6 @@
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
-	HRESULT result;
-
 #pragma region 基盤システムの初期化
 
 #pragma region WindowsAPI初期化処理
@@ -22,7 +20,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//DirectX12初期化
 	dxCommon = new DirectXCommon();
 	dxCommon->Initialize(winApp);
-
 #pragma endregion
 
 #pragma region 入力初期化
@@ -30,41 +27,37 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//入力の初期化
 	input = new Input();
 	input->Initialize(winApp);
-
 #pragma endregion
 
 #pragma region スプライトの初期化
 	SpriteCommon* spriteCommon = nullptr;
+	// スプライト共通部分の初期化
 	spriteCommon = new SpriteCommon;
-	spriteCommon->Initialize();
+	spriteCommon->Initialize(dxCommon);
 #pragma endregion
 
 #pragma endregion
 
 #pragma region 最初のシーンの初期化
-	Sprite* sprite = nullptr;
-	sprite = new Sprite;
-	sprite->Initialize();
+	Sprite* sprite = new Sprite;
+	sprite->Initialize(spriteCommon);
 #pragma endregion
 
-	while (true)
-	{
+	while (true) {
 #pragma region 基盤システムの更新
 		if (winApp->ProcessMessage()) {
 			// ゲームループを抜ける
 			break;
 		}
-
+#pragma endregion
 		//入力の更新
 		input->Update();
-#pragma endregion
 		// 描画前処理
 		dxCommon->PreDraw();
-
 #pragma region 最初のシーンの描画
-		
+		// スプライトの描画
+		spriteCommon->PreDraw();
 #pragma endregion
-
 		//描画後処理
 		dxCommon->PostDraw();
 	}
