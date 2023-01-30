@@ -14,18 +14,16 @@ void Sprite::Initialize(SpriteCommon* spriteCommon_) {
 		{-0.5f,+0.5f,0.0f}, // 左上
 		{+0.5f,-0.5f,0.0f}, // 右下
 	};
-
 	// 頂点データ全体のサイズ = 頂点データ一つ分のサイズ * 頂点データの要素数
 	UINT sizeVB = static_cast<UINT>(sizeof(XMFLOAT3) * _countof(vertices));
 
 	// 頂点バッファの設定
-	D3D12_HEAP_PROPERTIES heapProp{};
-	heapProp.Type = D3D12_HEAP_TYPE_UPLOAD;
-
+	D3D12_HEAP_PROPERTIES heapProp{}; // ヒープ設定
+	heapProp.Type = D3D12_HEAP_TYPE_UPLOAD; // GPUへの転送用
 	// リソース設定
 	D3D12_RESOURCE_DESC resDesc{};
 	resDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	resDesc.Width = sizeVB;
+	resDesc.Width = sizeVB; // 頂点データ全体のサイズ
 	resDesc.Height = 1;
 	resDesc.DepthOrArraySize = 1;
 	resDesc.MipLevels = 1;
@@ -34,13 +32,12 @@ void Sprite::Initialize(SpriteCommon* spriteCommon_) {
 
 	// 頂点バッファの生成
 	result = spriteCommon->GetDirectXCommon()->GetDevice()->CreateCommittedResource(
-		&heapProp,
+		&heapProp, // ヒープ設定
 		D3D12_HEAP_FLAG_NONE,
-		&resDesc,
+		&resDesc, // リソース設定
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
-		IID_PPV_ARGS(&vertBuff)
-	);
+		IID_PPV_ARGS(&vertBuff));
 	assert(SUCCEEDED(result));
 
 	// GPU上のバッファに対応した仮想目盛り(メインメモリ上)を取得

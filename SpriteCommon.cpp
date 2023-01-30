@@ -18,7 +18,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxCommon_) {
 
 	// 頂点シェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/shaders/BasicVS.hlsl",  // シェーダファイル名
+		L"Resources/shaders/SpriteVS.hlsl",  // シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "vs_5_0", // エントリーポイント名、シェーダーモデル指定
@@ -43,7 +43,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxCommon_) {
 
 	// ピクセルシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/shaders/BasicPS.hlsl",   // シェーダファイル名
+		L"Resources/shaders/SpritePS.hlsl",   // シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "ps_5_0", // エントリーポイント名、シェーダーモデル指定
@@ -112,7 +112,7 @@ void SpriteCommon::Initialize(DirectXCommon* dxCommon_) {
 	pipelineDesc.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
 	// ルートシグネチャ
-   // ルートシグネチャの設定
+	// ルートシグネチャの設定
 	D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc{};
 	rootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 	// ルートシグネチャのシリアライズ
@@ -133,10 +133,10 @@ void SpriteCommon::Initialize(DirectXCommon* dxCommon_) {
 }
 
 void SpriteCommon::PreDraw() {
-	// パイプラインステートとルートシグネチャの設定
+	// パイプラインステートとルートシグネチャの設定コマンド
 	dxCommon->GetCommandList()->SetPipelineState(pipelineState.Get());
 	dxCommon->GetCommandList()->SetGraphicsRootSignature(rootSignature.Get());
 
 	// プリミティブ形状の設定コマンド
-	dxCommon->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	dxCommon->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST); // 三角形リスト
 }
